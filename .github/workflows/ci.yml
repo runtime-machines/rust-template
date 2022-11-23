@@ -153,7 +153,7 @@ jobs:
             <details><summary>Code Coverage:</summary>
             
             \`\`\`\n
-            ${env.MY_STRING}
+            ${process.env.MY_STRING}
             \`\`\`
             
             </details>
