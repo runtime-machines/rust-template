@@ -118,7 +118,7 @@ jobs:
           profile: minimal
           override: true
       - name: install dep 
-        run: sudo apt install lcov pandoc tree -y
+        run: sudo apt install lcov pandoc tree lynx -y
       - uses: Swatinem/rust-cache@v2
       - name: Run cargo-tarpaulin
         uses: actions-rs/tarpaulin@v0.1
@@ -131,6 +131,7 @@ jobs:
           pandoc -f html out/src/index.html -t markdown -o index.md
           cat index.md
           cat out/src/index.html
+          lynx out/src/index.html -dump
       - name: Upload to Coveralls
         # upload only if push
         if: ${{ github.event_name == 'push' }}
