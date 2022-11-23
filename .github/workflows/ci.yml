@@ -128,11 +128,13 @@ jobs:
         run: genhtml lcov.info --output-directory out
       - name: Gen Coverage Comment
         id: coverage
-        run: echo "coverage=$(lynx out/src/index.html -dump)" >> $GITHUB_OUTPUT
+        run: |
+          MY_STRING=$(lynx out/src/index.html -dump)
+          echo "MY_STRING<<EOF" >> $GITHUB_ENV
+          echo "$MY_STRING" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
-        env:
-          COVERAGE: "${{ steps.coverage.outputs.coverage }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -144,14 +146,14 @@ jobs:
             })
             // Find any comment already made by the bot.                                                                                                    
             const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Code coverage:')
+              return comment.user.type === 'Bot' && comment.body.includes('Quality Metrics:')
             })                                                                   
             const commentBody = `#### Quality Metrics:
             
             <details><summary>Code Coverage:</summary>
             
             \`\`\`\n
-            ${process.env.COVERAGE}
+            ${env.MY_STRING}
             \`\`\`
             
             </details>
