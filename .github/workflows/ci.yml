@@ -128,11 +128,11 @@ jobs:
         run: genhtml lcov.info --output-directory out
       - name: Gen Coverage Comment
         id: coverage
-        run: lynx out/src/index.html -dump
+        run: echo "coverage=$(lynx out/src/index.html -dump)" >> $GITHUB_OUTPUT
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
-          COVERAGE: "${{ steps.coverage.outputs.stdout }}"
+          COVERAGE: "${{ steps.coverage.outputs.coverage }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
