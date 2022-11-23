@@ -118,20 +118,61 @@ jobs:
           profile: minimal
           override: true
       - name: install dep 
-        run: sudo apt install lcov pandoc tree lynx -y
+        run: sudo apt install lcov lynx -y
       - uses: Swatinem/rust-cache@v2
       - name: Run cargo-tarpaulin
         uses: actions-rs/tarpaulin@v0.1
         with:
           args: '--all-features --workspace --ignore-tests --out Lcov'
       - name: Gen Coverage Report
-        run: |
-          genhtml lcov.info --output-directory out
-          tree -L 3
-          pandoc -f html out/src/index.html -t markdown -o index.md
-          cat index.md
-          cat out/src/index.html
-          lynx out/src/index.html -dump
+        run: genhtml lcov.info --output-directory out
+      - name: Gen Coverage Comment
+        id: coverage
+        run: lynx out/src/index.html -dump
+      - uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+          COVERAGE: "${{ steps.coverage.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // Get the existing comments.
+            const {data: comments} = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.number,
+            })
+            // Find any comment already made by the bot.                                                                                                    
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('Code coverage:')
+            })                                                                   
+            const commentBody = `#### Quality Metrics:
+            
+            <details><summary>Code Coverage:</summary>
+            
+            \`\`\`\n
+            ${process.env.COVERAGE}
+            \`\`\`
+            
+            </details>
+            
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: commentBody
+              })
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.number,
+                body: commentBody
+              })
+            }
+
       - name: Upload to Coveralls
         # upload only if push
         if: ${{ github.event_name == 'push' }}
