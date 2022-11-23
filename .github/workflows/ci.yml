@@ -128,8 +128,9 @@ jobs:
         run: |
           genhtml lcov.info --output-directory out
           tree -L 3
-          pandoc -f html out/src/main.rs.gcov.html -t markdown -o index.md
+          pandoc -f html out/src/index.html -t markdown -o index.md
           cat index.md
+          cat out/src/index.html
       - name: Upload to Coveralls
         # upload only if push
         if: ${{ github.event_name == 'push' }}
