@@ -117,20 +117,22 @@ jobs:
           toolchain: stable
           profile: minimal
           override: true
+      - name: install dep 
+        run: apt install lcov pandoc tree
       - uses: Swatinem/rust-cache@v2
       - name: Run cargo-tarpaulin
         uses: actions-rs/tarpaulin@v0.1
         with:
           args: '--all-features --workspace --ignore-tests --out Lcov'
-      - name: debug
-        run: cat lcov.info
-      - name: Run cargo-tarpaulin
-        uses: actions-rs/tarpaulin@v0.1
-        with:
-          args: '--all-features --workspace --ignore-tests --out Json'
-      - name: debug
-        run: cat tarpaulin-report.json
+      - name: Gen Coverage Report
+        run: |
+          genhtml lcov.info --output-directory out
+          tree -L 3
+          pandoc -f html out/src/main.rs.gcov.html -t markdown -o index.md
+          cat index.md
       - name: Upload to Coveralls
+        # upload only if push
+        if: ${{ github.event_name == 'push' }}
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
