@@ -122,6 +122,14 @@ jobs:
         uses: actions-rs/tarpaulin@v0.1
         with:
           args: '--all-features --workspace --ignore-tests --out Lcov'
+      - name: debug
+        run: cat lcov.info
+      - name: Run cargo-tarpaulin
+        uses: actions-rs/tarpaulin@v0.1
+        with:
+          args: '--all-features --workspace --ignore-tests --out Json'
+      - name: debug
+        run: ls -la
       - name: Upload to Coveralls
         # upload only if push
         if: ${{ github.event_name == 'push' }}
