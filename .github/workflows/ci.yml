@@ -118,7 +118,7 @@ jobs:
           profile: minimal
           override: true
       - name: install dep 
-        run: apt install lcov pandoc tree
+        run: sudo apt install lcov pandoc tree -y
       - uses: Swatinem/rust-cache@v2
       - name: Run cargo-tarpaulin
         uses: actions-rs/tarpaulin@v0.1
