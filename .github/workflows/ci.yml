@@ -129,7 +129,7 @@ jobs:
         with:
           args: '--all-features --workspace --ignore-tests --out Json'
       - name: debug
-        run: ls -la
+        run: cat tarpaulin-report.json
       - name: Upload to Coveralls
         # upload only if push
         if: ${{ github.event_name == 'push' }}
