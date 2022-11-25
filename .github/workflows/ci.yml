@@ -124,6 +124,9 @@ jobs:
         uses: actions-rs/tarpaulin@v0.1
         with:
           args: '--all-features --workspace --ignore-tests --out Lcov'
+      
+      # Uncomment this if you want to run the coverage without Coveralls
+      #
       # - name: Gen Coverage Report
       #   run: genhtml lcov.info --output-directory out
       # - name: Gen Coverage Comment
@@ -175,11 +178,12 @@ jobs:
       #         })
       #       }
 
-      - name: Upload to Coveralls
-        # upload only if push
-        if: ${{ github.event_name == 'push' }}
-        uses: coverallsapp/github-action@master
+      - name: rust-grcov
+        uses: actions-rs/grcov@v0
+
+      - name: Codecov
+        uses: codecov/codecov-action@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: './lcov.info'
+          verbose: true
+          fail_ci_if_error: true
 
