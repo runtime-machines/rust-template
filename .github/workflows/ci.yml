@@ -175,11 +175,12 @@ jobs:
               })
             }
 
-      - name: Upload to Coveralls
-        # upload only if push
-        if: ${{ github.event_name == 'push' }}
-        uses: coverallsapp/github-action@master
+      - name: rust-grcov
+        uses: actions-rs/grcov@v0.1.5
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.0
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: './lcov.info'
+          verbose: true
+          fail_ci_if_error: true
+
 
