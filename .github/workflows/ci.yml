@@ -13,11 +13,6 @@ jobs:
   ci:
     name: CI Pipeline
     runs-on: ubuntu-latest
-    services:
-      redis:
-        image: redis
-        ports:
-          - 6379:6379
     env:
       SQLX_VERSION: 0.6.2
       SQLX_FEATURES: "rustls, postgres"
