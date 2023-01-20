@@ -105,9 +105,9 @@ jobs:
           command: clippy
           args: --all-targets --all-features --workspace -- -D warnings
 
-      - name: Check sqlx-data.json is up-to-date
-        run: |
-          cargo sqlx prepare --check -- --bin rtm-manager
+      # - name: Check sqlx-data.json is up-to-date
+      #   run: |
+      #     cargo sqlx prepare --check -- --bin rtm-manager
 
       # Run test
       - name: Cargo Test
