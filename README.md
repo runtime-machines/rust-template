@@ -17,7 +17,7 @@ You can use it:
 It includes:
 
 - continuous integration via [GitHub Actions](https://github.com/features/actions)
-  - CI Workflows: 
+  - CI Workflows:
     - Test
     - Format check
     - Clippy
@@ -47,7 +47,6 @@ It includes:
 - dependencies scanning and updating thanks to [Dependabot](https://dependabot.com),
 - security code analysis using [Audit-check](https://github.com/actions-rs/audit-check),
 
-
 ## Usage
 
 1. Sign up on [Codecov](https://codecov.io/) and configure
@@ -61,6 +60,7 @@ It includes:
    - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
    - [LICENSE](LICENSE) (when defined)
    - [README.md](README.md)
+1. Uncomment the necessary workflow paths in the ci.yml workflow and add the ${{ secrets.CODECOV_TOKEN }} secret if you're planning to keep the repository private. Also you might need to add a /script/run.sh and a migration folder, depending on your SQLX needs
 
 ## License
 
