@@ -55,6 +55,7 @@ It includes:
 1. Click the `Use this template` button (alt. clone or download this repository).
 1. Replace all occurrences of `runtime-machines/rust-template` to `your_org/repo_name` in all files.
 1. Replace all occurrences of `rust-template` to `repo_name` in all files.
+1. Set up `CODECOV_TOKEN` secret in `https://github.com/runtime-machines/REPO_NAME/settings/secrets/actions`.
 1. Update the following files:
    - [CHANGELOG.md](CHANGELOG.md)
    - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
