@@ -119,12 +119,6 @@ jobs:
         env: 
           ENVIRONMENT: local
 
-      # Publish dry run
-      - uses: actions-rs/cargo@v1
-        with:
-          command: publish
-          args: --dry-run
-
       # Run tests + coverage
       - name: Coverage
         uses: actions-rs/cargo@v1
