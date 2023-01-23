@@ -43,7 +43,7 @@ It includes:
 - code formatting using [rust fmt](https://rust-lang.github.io/rustfmt/),
 - linting with [clippy](https://github.com/rust-lang/rust-clippy),
 - code coverage [HTML report](https://docs.codecov.com/docs) and tests
-- releasing using [Github Release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) and [Cargo publish](https://doc.rust-lang.org/cargo/commands/cargo-publish.html),
+- releasing using [Github Release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository),
 - dependencies scanning and updating thanks to [Dependabot](https://dependabot.com),
 - security code analysis using [Audit-check](https://github.com/actions-rs/audit-check),
 
