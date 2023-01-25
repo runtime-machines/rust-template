@@ -3,12 +3,6 @@ name: CI # Continuous Integration
 on:
   pull_request:
   push:
-<<<<<<< HEAD
-=======
-    branches:
-      - main
-  workflow_dispatch:
->>>>>>> 2da2c7c9d30a36e197bcd7e8f6b55bdfbdeceee2
 
 # uncomment this in pair with the script to start the postgres database
 # env:
