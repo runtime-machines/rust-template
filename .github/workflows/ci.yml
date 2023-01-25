@@ -3,6 +3,9 @@ name: CI # Continuous Integration
 on:
   pull_request:
   push:
+      branches:
+      - main
+  workflow_dispatch:
 
 # uncomment this in pair with the script to start the postgres database
 # env:
