@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 # uncomment this in pair with the script to start the postgres database
 # env:
@@ -47,12 +48,12 @@ jobs:
       - uses: Swatinem/rust-cache@v2
 
       # Cache also the home/runner/.cargo directory where sqlx-cli is being installed (≈200MB)
-      - name: Cache SQLX-cli
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/
-          key: ${{ runner.os }}-sqlx-${{ env.SQLX_VERSION }}
+      # - name: Cache SQLX-cli
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       ~/.cargo/
+      #     key: ${{ runner.os }}-sqlx-${{ env.SQLX_VERSION }}
 
       - name: Rustup stable
         run: rustup default stable
@@ -72,13 +73,12 @@ jobs:
           args: --no-deps --document-private-items --all-features --workspace --examples
       
       # Install SQLX-cli
-      - name: Install sqlx-cli
-        uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: >
-            sqlx-cli
-      
+      # - name: Install sqlx-cli
+      #   uses: actions-rs/cargo@v1
+      #   with:
+      #     command: install
+      #     args: >
+      #       sqlx-cli
       # Script to start and make migrations to a local postgres DB
       # -----
       # echo ">> Starting Postgres ..."
