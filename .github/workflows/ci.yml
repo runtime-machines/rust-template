@@ -3,6 +3,12 @@ name: CI # Continuous Integration
 on:
   pull_request:
   push:
+<<<<<<< HEAD
+=======
+    branches:
+      - main
+  workflow_dispatch:
+>>>>>>> 2da2c7c9d30a36e197bcd7e8f6b55bdfbdeceee2
 
 # uncomment this in pair with the script to start the postgres database
 # env:
@@ -39,12 +45,12 @@ jobs:
       - uses: Swatinem/rust-cache@v2
 
       # Cache also the home/runner/.cargo directory where sqlx-cli is being installed (≈200MB)
-      - name: Cache SQLX-cli
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/
-          key: ${{ runner.os }}-sqlx-${{ env.SQLX_VERSION }}
+      # - name: Cache SQLX-cli
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       ~/.cargo/
+      #     key: ${{ runner.os }}-sqlx-${{ env.SQLX_VERSION }}
 
       - name: Rustup stable
         run: rustup default stable
@@ -64,13 +70,12 @@ jobs:
           args: --no-deps --document-private-items --all-features --workspace --examples
       
       # Install SQLX-cli
-      - name: Install sqlx-cli
-        uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: >
-            sqlx-cli
-      
+      # - name: Install sqlx-cli
+      #   uses: actions-rs/cargo@v1
+      #   with:
+      #     command: install
+      #     args: >
+      #       sqlx-cli
       # Script to start and make migrations to a local postgres DB
       # -----
       # echo ">> Starting Postgres ..."
@@ -111,12 +116,6 @@ jobs:
         env: 
           ENVIRONMENT: local
           RUSTFLAGS: -C instrument-coverage
-
-      # Publish dry run
-      - uses: actions-rs/cargo@v1
-        with:
-          command: publish
-          args: --dry-run
 
       - name: rcov
         run: |
