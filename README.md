@@ -61,11 +61,12 @@ It includes:
    - [LICENSE](LICENSE) (when defined)
    - [README.md](README.md)
 1. Uncomment the necessary workflow paths in the ci.yml workflow and add the ${{ secrets.CODECOV_TOKEN }} secret if you're planning to keep the repository private. Also you might need to add a /script/run.sh and a migration folder, depending on your SQLX needs
-   - To add a deploy key:
-     - generate the key using `ssh-keygen -t ed25519 -C "<key_description:key_owner@runtimemachines.com>"`
-     - Add the .pub to the source repository deploy keys
-     - Add the private key in this repository secrets
-     - Add the key to the `ssh-private-key` in the `ssh-agent` step 
+1. To add a deploy key in order to use a private dependency:
+   - uncomment the `ssh-agent` step
+   - generate the key on your local machine using `ssh-keygen -t ed25519 -C "<key_description:key_owner@runtimemachines.com>"`
+   - Add the .pub to the source repository deploy keys
+   - Add the private key in this repository secrets
+   - Add the secret to the `ssh-private-key` in the `ssh-agent` step 
 1. Uncomment SQLX-CLI and the SQLX-CLI cache step if necessary (installation path of SQLX-CLI will be ~/.cargo/)
 
 ## License
