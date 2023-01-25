@@ -113,7 +113,7 @@ jobs:
 
       - name: rcov
         run: |
-          grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore "*cargo*" -o lcov.txt
+          grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore "*cargo*" -o codecov.txt
       - name: Codecov
         uses: codecov/codecov-action@v3
         with:
