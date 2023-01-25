@@ -35,13 +35,7 @@ jobs:
           toolchain: stable
           profile: minimal
           override: true
-          components: rustfmt, clippy
-      
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          profile: minimal
+          components: rustfmt, clippy, llvm-tools-preview
       
       # Cache .cargo and target dirs
       - uses: Swatinem/rust-cache@v2
@@ -118,6 +112,7 @@ jobs:
           args: --all-features --workspace
         env: 
           ENVIRONMENT: local
+          RUSTFLAGS: -C instrument-coverage
 
       # Publish dry run
       - uses: actions-rs/cargo@v1
@@ -125,20 +120,9 @@ jobs:
           command: publish
           args: --dry-run
 
-      # Run tests + coverage
-      - name: Coverage
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --all-features --no-fail-fast --workspace
-          toolchain: nightly
-        env:
-          ENVIRONMENT: local
-          CARGO_INCREMENTAL: '0'
-          RUSTFLAGS: '-Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort'
-          RUSTDOCFLAGS: '-Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort'
-
-      - uses: actions-rs/grcov@v0.1
+      - name: rcov
+        run: |
+          grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore "*cargo*" -o lcov
       - name: Codecov
         uses: codecov/codecov-action@v3
         with:
