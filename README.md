@@ -66,6 +66,7 @@ It includes:
      - Add the .pub to the source repository deploy keys
      - Add the private key in this repository secrets
      - Add the key to the `ssh-private-key` in the `ssh-agent` step 
+1. Uncomment SQLX-CLI and the SQLX-CLI cache step if necessary (installation path of SQLX-CLI will be ~/.cargo/)
 
 ## License
 
