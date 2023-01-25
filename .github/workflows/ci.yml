@@ -35,19 +35,15 @@ jobs:
           override: true
           components: rustfmt, clippy, llvm-tools-preview
       
-      # Cache .cargo and target dirs
-      - uses: Swatinem/rust-cache@v2
-
-      # Cache also the home/runner/.cargo directory where sqlx-cli is being installed (≈200MB)
-      # - name: Cache SQLX-cli
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       ~/.cargo/
-      #     key: ${{ runner.os }}-sqlx-${{ env.SQLX_VERSION }}
-
-      - name: Rustup stable
-        run: rustup default stable
+      - name: Restore cached
+        id: cache-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.cargo/
+            ./.cargo/
+            ./target/
+          key: ${{ runner.os }}-cargo-lock${{ hashFiles('**Cargo.lock') }}:toml${{ hashFiles('**Cargo.toml') }}
       
       # Run Format and Docs checks (without SQLX)
       - name: Check formatting
@@ -63,6 +59,14 @@ jobs:
           command: doc
           args: --no-deps --document-private-items --all-features --workspace --examples
       
+      # Install grcov
+      - name: Install grcov
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: >
+            grcov
+
       # Install SQLX-cli
       # - name: Install sqlx-cli
       #   uses: actions-rs/cargo@v1
@@ -111,9 +115,19 @@ jobs:
           ENVIRONMENT: local
           RUSTFLAGS: -C instrument-coverage
 
-      - name: rcov
-        run: |
-          grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore "*cargo*" -o codecov.txt
+      - name: Save Cache
+        id: cache-save
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            ~/.cargo/
+            ./.cargo/
+            ./target/
+          key: ${{ steps.cache-restore.outputs.cache-primary-key }}
+
+      - name: grcov
+        run: grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore "*cargo*" -o ./lcov.info
+
       - name: Codecov
         uses: codecov/codecov-action@v3
         with:
