@@ -10,7 +10,7 @@ jobs:
     if: ${{ github.ref != 'refs/heads/dev' && github.ref != 'refs/heads/main'}}
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -37,7 +37,7 @@ jobs:
             environment: Main
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
         if: ${{ github.ref == matrix.pipelines.branch }}
@@ -71,7 +71,7 @@ jobs:
             server: prod
     steps:      
       - name: Get application code from repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: runtime-machines/kubernetes-cd
           ssh-key: ${{ secrets.CD_DEPLOY_KEY }}
